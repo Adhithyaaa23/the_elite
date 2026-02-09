@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration - EliteServices</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="ureg.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <header class="navbar">
+        
+        <nav>
+            <a href="index.php">Home</a>
+            <a href="about.php">About</a>
+            <a href="features.php" >Feature</a>
+        </nav>
+        
+    </header>
+
+    <div class="main-container">
+        <div class="glass-box">
+            <div class="left-panel">
+                <div class="panel-content">
+                    <h1>Already Have Account?</h1>
+                   <a href="ulog.html">
+    <button type="button" class="btn-ghost">SIGN IN</button>
+</a>
+
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="header-logo">
+                    <span class="logo">Elite<span>Services</span></span>
+                </div>
+                
+                <div class="form-container">
+                    <h2>Welcome!</h2>
+                    <form action="ureg.php" method="post">
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Name:</label>
+                                <input type="text" name="uname" required>
+                            </div>
+                            <div class="input-group">
+                                <label>E-Mail:</label>
+                                <input type="email" name="uemail" required>
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group password-wrapper">
+                                <label>Password:</label>
+                                <input type="password" id="upassword" name="upassword" required>
+                                <span class="eye-icon" onclick="toggleVisibility()">👁️</span>
+                            </div>
+                            <div class="input-group">
+                                <label>Contact:</label>
+                                <input type="tel" name="ucontact" pattern="[0-9]{10}" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Role:</label>
+                            <select name="urole" required>
+                                <option value="">Select Role</option>
+                                <option value="Donor">Donor</option>
+                                <option value="Receiver">Receiver</option>
+                            </select>
+                        </div>
+                        
+                        <div class="button-row">
+                            <input type="submit" value="REGISTER" class="btn-submit">
+                            <input type="reset" value="Clear" class="btn-clear">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleVisibility() {
+            const pass = document.getElementById("upassword");
+            pass.type = pass.type === "password" ? "text" : "password";
+        }
+    </script>
+</body>
+</html>

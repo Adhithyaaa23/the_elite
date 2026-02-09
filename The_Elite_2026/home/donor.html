@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate Food – EliteServices</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --elite-green: #2e7d32;
+            --elite-light-green: #e8f5e9;
+            --elite-dark: #1e293b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .form-card {
+            background: white;
+            width: 100%;
+            max-width: 550px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--elite-green);
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .header i { font-size: 2.5rem; color: var(--elite-green); }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .full-width { grid-column: span 2; }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--elite-dark);
+            font-size: 0.85rem;
+        }
+
+        input[type="text"], input[type="date"], input[type="tel"], select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* --- Image Upload Styling --- */
+        .image-upload-wrapper {
+            border: 2px dashed var(--elite-green);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            background: var(--elite-light-green);
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .image-upload-wrapper:hover { background: #dcfce7; }
+
+        #imagePreview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: none; /* Hidden until image is chosen */
+            margin-top: 10px;
+        }
+
+        .upload-icon { font-size: 2rem; color: var(--elite-green); }
+
+        .btn-submit {
+            grid-column: span 2;
+            background: var(--elite-green);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+    function getLocationAndSubmit(event) {
+      event.preventDefault(); // stop form from submitting immediately
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          document.getElementById("lat").value = position.coords.latitude;
+          document.getElementById("lon").value = position.coords.longitude;
+          document.getElementById("donorForm").submit();
+        }, function(error) {
+          alert("Location access denied or unavailable.");
+        });
+      } else {
+        alert("Geolocation not supported by this browser.");
+      }
+     }
+   </script>
+</head>
+<body>
+
+<div class="form-card">
+    <div class="header">
+        <i class="fas fa-camera"></i>
+        <h2>Food Donation Details</h2>
+    </div>
+
+    <form id="donorForm" action="donorfood.php" method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event)">
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Food Name</label>
+                <input type="text" name="fname" required>
+            </div>
+
+            <div class="form-group">
+                <label>Food Type</label>
+                <select name="ftype">
+                    <option value="Veg">Vegetarian</option>
+                    <option value="Non-Veg">Non-Vegetarian</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="text" name="fqty" required>
+            </div>
+
+            <div class="form-group">
+                <label>Expiry Date</label>
+                <input type="date" name="fexp" required>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Upload Food Photo</label>
+                <div class="image-upload-wrapper" onclick="document.getElementById('foodImage').click()">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p id="uploadText" style="margin:5px 0; font-size:0.8rem;">Click to upload or take a photo</p>
+                    <img id="imagePreview" src="" alt="Preview">
+                    <input type="file" id="foodImage" name="fimage" accept="image/*" style="display:none;" onchange="previewImage(event)" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Contact Number</label>
+                <input type="tel" name="fcontact" required>
+            </div>
+
+            <div class="form-group">
+                <label>City</label>
+                <input type="text" name="fcity" required>
+            </div>
+        </div>
+
+        <input type="hidden" id="lat" name="latitude">
+        <input type="hidden" id="lon" name="longitude">
+        <input type="hidden" name="uname" id="unameid">
+        <input type="hidden" name="upassword" id="upasswordid">
+
+        <input type="submit" class="btn-submit" value="Submit Donation">
+    </form>
+</div>
+
+<script>
+    // Preview the image before uploading
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('imagePreview');
+            const icon = document.querySelector('.upload-icon');
+            const text = document.getElementById('uploadText');
+            
+            output.src = reader.result;
+            output.style.display = "block";
+            icon.style.display = "none";
+            text.innerHTML = "Image Selected!";
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // URL Params Logic
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("unameid").value = params.get("uname");
+    document.getElementById("upasswordid").value = params.get("upassword");
+
+    function getLocationAndSubmit(event) {
+        event.preventDefault();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                document.getElementById("lat").value = position.coords.latitude;
+                document.getElementById("lon").value = position.coords.longitude;
+                document.getElementById("donorForm").submit();
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
